@@ -1,0 +1,94 @@
+Shows how to create an executable jar
+using TomEE embedded and `maven-shade-plugin`.
+
+== Getting Started
+
+Just run:
+
+[source]
+----
+mvn package
+----
+
+Then execute the built jar:
+
+[source]
+----
+java -jar target/tomeeembedded-shade-1.0-SNAPSHOT.jar --as-war
+----
+
+NOTE: we reused default TomEE embedded `Main` class so we need to specify `--as-war` to ask to deploy the shade
+otherwise we would simply be starting an empty server.
+
+You should get these logs while the server is starting:
+
+[source]
+----
+INFOS - Starting TomEE from: /work/tomeeembedded-shade/./apache-tomee
+INFOS - Initializing ProtocolHandler ["http-bio-8080"]
+INFOS - Starting service Tomcat
+INFOS - Starting Servlet Engine: Apache Tomcat/8.0.20
+INFOS - Starting ProtocolHandler ["http-bio-8080"]
+INFOS - Using 'openejb.jdbc.datasource-creator=org.apache.tomee.jdbc.TomEEDataSourceCreator'
+INFOS - ********************************************************************************
+INFOS - OpenEJB http://tomee.apache.org/
+INFOS - Startup: Sun Mar 01 19:11:58 CET 2015
+INFOS - Copyright 1999-2015 (C) Apache OpenEJB Project, All Rights Reserved.
+INFOS - Version: 5.0.0-SNAPSHOT
+INFOS - Build date: 20150301
+INFOS - Build time: 07:08
+INFOS - ********************************************************************************
+INFOS - openejb.home = /work/tomeeembedded-shade/apache-tomee
+INFOS - openejb.base = /work/tomeeembedded-shade/apache-tomee
+INFOS - Created new singletonService org.apache.openejb.cdi.ThreadSingletonServiceImpl@2eca06b3
+INFOS - Succeeded in installing singleton service
+INFOS - openejb configuration file is '/work/tomeeembedded-shade/apache-tomee/conf/openejb.xml'
+INFOS - Configuring Service(id=Tomcat Security Service, type=SecurityService, provider-id=Tomcat Security Service)
+INFOS - Configuring Service(id=Default Transaction Manager, type=TransactionManager, provider-id=Default Transaction Manager)
+INFOS - Using 'openejb.system.apps=false'
+INFOS - Using 'openejb.deployments.classpath=false'
+INFOS - Creating TransactionManager(id=Default Transaction Manager)
+INFOS - Creating SecurityService(id=Tomcat Security Service)
+INFOS - Using 'openejb.servicemanager.enabled=false'
+INFOS - Using 'openejb.deployments.classpath.filter.systemapps=false'
+INFOS - Configuring enterprise application: 
+INFOS - Configuring Service(id=Default Managed Container, type=Container, provider-id=Default Managed Container)
+INFOS - Auto-creating a container for bean .Comp1919943661: Container(type=MANAGED, id=Default Managed Container)
+INFOS - Creating Container(id=Default Managed Container)
+INFOS - Using directory /tmp for stateful session passivation
+INFOS - Enterprise application "" loaded.
+INFOS - Assembling app: 
+INFOS - Existing thread singleton service in SystemInstance(): org.apache.openejb.cdi.ThreadSingletonServiceImpl@2eca06b3
+INFOS - OpenWebBeans Container is starting...
+INFOS - Adding OpenWebBeansPlugin : [CdiPlugin]
+INFOS - Adding OpenWebBeansPlugin : [OpenWebBeansJsfPlugin]
+INFOS - All injection points were validated successfully.
+INFOS - OpenWebBeans Container has started, it took 204 ms.
+INFOS - using default host: localhost
+INFOS - ------------------------- localhost -> /
+INFOS - Using 'openejb.session.manager=org.apache.tomee.catalina.session.QuickSessionManager'
+INFOS - The start() method was called on component [org.apache.catalina.webresources.JarResourceSet@52377f8d] after start() had already been called. The second call will be ignored.
+INFOS - Using providers:
+INFOS -      org.apache.johnzon.jaxrs.JohnzonProvider@6bad229b
+INFOS -      org.apache.cxf.jaxrs.provider.JAXBElementProvider@33bb2557
+INFOS -      org.apache.johnzon.jaxrs.JsrProvider@43908d49
+INFOS -      org.apache.johnzon.jaxrs.WadlDocumentMessageBodyWriter@472bd646
+INFOS -      org.apache.openejb.server.cxf.rs.EJBAccessExceptionMapper@f00b22b
+INFOS - REST Application: http://localhost:8080/               -> org.apache.openejb.server.rest.InternalApplication
+INFOS -      Service URI: http://localhost:8080/people         -> Pojo org.superbiz.PeopleResource
+INFOS -               GET http://localhost:8080/people/master  ->      Person master() 
+INFOS -               GET http://localhost:8080/people/student ->      Person student()
+INFOS - Deployed Application(path=)
+
+----
+
+Finally test your service hitting the logged urls:
+
+[source]
+----
+$ curl http://127.0.0.1:8080/people/master
+{"name":"Christian"}
+
+$ curl http://127.0.0.1:8080/people/student
+{"name":"Ana"}
+----

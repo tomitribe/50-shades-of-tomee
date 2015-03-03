@@ -1,0 +1,75 @@
+Shows how to create an executable jar
+using `ApplicationComposer` and `maven-shade-plugin`.
+
+== Getting Started
+
+Just run:
+
+[source]
+----
+mvn package
+----
+
+Then execute the built jar:
+
+[source]
+----
+java -jar target/applicationcomposer-shade-1.0-SNAPSHOT.jar
+----
+
+You should get these logs while the server is starting:
+
+[source]
+----
+INFOS - Cannot find the configuration file [conf/openejb.xml].  Will attempt to create one for the beans deployed.
+INFOS - Configuring Service(id=Default Security Service, type=SecurityService, provider-id=Default Security Service)
+INFOS - Configuring Service(id=Default Transaction Manager, type=TransactionManager, provider-id=Default Transaction Manager)
+INFOS - Creating TransactionManager(id=Default Transaction Manager)
+INFOS - Creating SecurityService(id=Default Security Service)
+INFOS - Initializing network services
+INFOS - Creating ServerService(id=httpejbd)
+INFOS - Created ServicePool 'httpejbd' with (10) core threads, limited to (200) threads with a queue of (9)
+INFOS - Creating ServerService(id=cxf-rs)
+INFOS - Initializing network services
+INFOS -   ** Bound Services **
+INFOS -   NAME                 IP              PORT  
+INFOS -   httpejbd             127.0.0.1       4204  
+INFOS - -------
+INFOS - Ready!
+INFOS - Configuring enterprise application: /work/applicationcomposer-shade/MyApp
+INFOS - Configuring Service(id=Default Managed Container, type=Container, provider-id=Default Managed Container)
+INFOS - Auto-creating a container for bean org.superbiz.MyApp: Container(type=MANAGED, id=Default Managed Container)
+INFOS - Creating Container(id=Default Managed Container)
+INFOS - Using directory /tmp for stateful session passivation
+INFOS - Enterprise application "/work/applicationcomposer-shade/MyApp" loaded.
+INFOS - Creating dedicated application classloader for MyApp
+INFOS - Assembling app: /work/applicationcomposer-shade/MyApp
+INFOS - Created new singletonService org.apache.openejb.cdi.ThreadSingletonServiceImpl@35227d5c
+INFOS - Succeeded in installing singleton service
+INFOS - OpenWebBeans Container is starting...
+INFOS - Adding OpenWebBeansPlugin : [CdiPlugin]
+INFOS - All injection points were validated successfully.
+INFOS - OpenWebBeans Container has started, it took 187 ms.
+INFOS - Using providers:
+INFOS -      org.apache.johnzon.jaxrs.JohnzonProvider@3ff581be
+INFOS -      org.apache.cxf.jaxrs.provider.JAXBElementProvider@f1901c0
+INFOS -      org.apache.johnzon.jaxrs.JsrProvider@32c1ebfe
+INFOS -      org.apache.johnzon.jaxrs.WadlDocumentMessageBodyWriter@596c8aba
+INFOS -      org.apache.openejb.server.cxf.rs.EJBAccessExceptionMapper@6507e733
+INFOS - REST Application: http://127.0.0.1:4204/               -> org.apache.openejb.server.rest.InternalApplication
+INFOS -      Service URI: http://127.0.0.1:4204/people         -> Pojo org.superbiz.PeopleResource
+INFOS -               GET http://127.0.0.1:4204/people/master  ->      Person master() 
+INFOS -               GET http://127.0.0.1:4204/people/student ->      Person student()
+INFOS - Deployed Application(path=/work/applicationcomposer-shade/MyApp)
+----
+
+Finally test your service hitting the logged urls:
+
+[source]
+----
+$ curl http://127.0.0.1:4204/people/master
+{"name":"Christian"}
+
+$ curl http://127.0.0.1:4204/people/student
+{"name":"Ana"}
+----

@@ -1,0 +1,11 @@
+= 50 Shades of TomEE
+
+This repository contains few sample linked to Tomitribe this blog post: 
+
+You'll find:
+
+- applicationcomposer-shade: shade based on ApplicationComposer
+- tomeeembedded-shade: shade based on TomEE Embedded
+
+Both sub projects contain a README.adoc with more details.
+
